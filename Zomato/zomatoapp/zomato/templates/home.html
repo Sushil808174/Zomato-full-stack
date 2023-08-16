@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+{% if user.is_authenticated %}
+<div style="width: 100%;">
+    <div
+        style="width: 100%;height: 400px; background-image: url('../static/img/bgimg.avif');background-position: center;background-repeat: no-repeat;background-size: cover;">
+    </div>
+</div>
+
+<div class="container grid mt-5 m-auto">
+    <div class="row mb-4">
+        {% for item in data %}
+        <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+                <img src="{{ item.image }}" class="card-img-top" alt="{{ item.image }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.name }}</h5>
+                    <p class="card-text"><strong>Price</strong> : <span class="text-warning">₹{{ item.price }}</span></p>
+                    {% if item.availability %}
+                    <p class="card-text">Availability : <span class="border border-warning rounded m-4 p-1">Available</span></p>
+                    {% else %}
+                    <p class="card-text">Availability :<span class="border border-warning rounded m-4 p-1">Not Available</span></p>
+                    {% endif %}
+                    <a href="{% url 'item_details' item.id %}" class="btn btn-danger">Order now</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% else %}
+<div class="col-md-6 offset-md-3">
+    <h1>Login</h1>
+    <br />
+
+    <form method="POST" action="{% url 'home' %}">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <input type="text" class="form-control" name="username" , placeholder="Username" required>
+
+        </div><br />
+        <div class="mb-3">
+            <input type="password" class="form-control" name="password" , placeholder="Password" required>
+        </div>
+        <br />
+        <button type="submit" class="btn btn-secondary">Login</button>
+
+    </form>
+</div>
+
+
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="mt-5" style="text-align: center;">Details</h1>
+<div class="container mt-2 d-flex justify-content-center">
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Name :  {{user.username}}</h5>
+                <p class="card-text">Email Address : {{user.email}}</p>
+                <p class="card-text">Item Name : {{item.name}}</p>
+                <p class="card-text">Item Price : ₹{{item.price}}</p>
+                <a href="{% url 'go_place_order' item.id %}" class="btn btn-danger">Place Order</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
