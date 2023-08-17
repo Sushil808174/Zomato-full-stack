@@ -9,12 +9,12 @@
     </div>
 </div>
 
-<div class="container grid mt-5 m-auto">
-    <div class="row mb-4">
+<div class="grid mt-5 m-auto">
+    <div class="row col-md-8 offset-md-2">
         {% for item in data %}
-        <div class="col-md-4">
+        <div class="col-md-4 mb-3">
             <div class="card" style="width: 18rem;">
-                <img src="{{ item.image }}" class="card-img-top" alt="{{ item.image }}">
+                <img style="height: 200px;" src="{{ item.image }}" class="card-img-top custom-card-img" alt="{{ item.image }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ item.name }}</h5>
                     <p class="card-text"><strong>Price</strong> : <span class="text-warning">₹{{ item.price }}</span></p>
@@ -23,13 +23,17 @@
                     {% else %}
                     <p class="card-text">Availability :<span class="border border-warning rounded m-4 p-1">Not Available</span></p>
                     {% endif %}
-                    <a href="{% url 'item_details' item.id %}" class="btn btn-danger">Order now</a>
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'item_details' item.id %}" class="btn btn-danger">Details</a>
+                        <a href="{% url 'update_menu_item' item.id %}" class="btn btn-danger">Update</a>
+                    </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
 </div>
+
 
 
 {% else %}

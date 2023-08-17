@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="col-md-6 offset-md-3 ">
+        <h1 class="mb-4">Profile</h1>
+        <div class="p-3 border rounded shadow">
+            <table class="table table-borderless table-hover">
+                <tbody>
+                    <tr>
+                        <th scope="row">Username</th>
+                        <td>{{ user_profile.user.username }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Name</th>
+                        <td>{{ user_profile.name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Email</th>
+                        <td>{{ user_profile.user.email }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Phone</th>
+                        <td>{{ user_profile.phone }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Address</th>
+                        <td>{{ user_profile.address }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">City</th>
+                        <td>{{ user_profile.city }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">State</th>
+                        <td>{{ user_profile.state }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Pincode</th>
+                        <td>{{ user_profile.pincode }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

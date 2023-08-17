@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import UserProfile,MenuItem  # Import your UserProfile model
+from .models import UserProfile,MenuItem,Order  # Import your UserProfile model
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True,widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Email Address'}),label="")
@@ -27,6 +27,25 @@ class RegistrationForm(UserCreationForm):
         fields = ['username','name', 'email', 'password1', 'password2', 'phone', 'address', 'city', 'state', 'pincode']
 
 
-class OrderForm(forms.Form):
-    item = forms.ChoiceField(choices=[])  # Replace with actual choices
-    quantity = forms.IntegerField(min_value=1)
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['item', 'quantity', 'status']
+
+class MenuItemForm(forms.ModelForm):
+    class Meta:
+        model = MenuItem
+        fields = ['name', 'image', 'price', 'availability'] 
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'image': forms.URLInput(attrs={'class': 'form-control'}),
+            'price': forms.NumberInput(attrs={'class': 'form-control'}),
+            'availability': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+        labels = {
+            'name': 'Item Name',
+            'image': 'Image URL',
+            'price': 'Price',
+            'availability': 'Available',
+        }

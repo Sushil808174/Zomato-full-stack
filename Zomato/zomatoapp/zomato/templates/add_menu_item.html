@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="col-md-6 offset-md-3">
+        <h1 class="mb-4">Add Menu Item</h1>
+        <form method="POST" enctype="multipart/form-data" class="border rounded p-3 shadow">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-danger">Add Menu Item</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

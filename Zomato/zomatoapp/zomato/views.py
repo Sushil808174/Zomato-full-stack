@@ -1,7 +1,8 @@
 from django.contrib.auth import login,logout,authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from .forms import RegistrationForm,OrderForm
+from .forms import RegistrationForm,OrderForm,MenuItemForm
 from .models import UserProfile,MenuItem,Order
 from django.urls import reverse
 
@@ -72,31 +73,70 @@ def go_place_order(request,item_id):
 
 
 def place_order(request, item_id):
-    print("inside place-ordeer")
     if request.user.is_authenticated:
-        print("inside auth")
         item = MenuItem.objects.get(id=item_id)
-        print('after item')
+        
         if request.method == 'POST':
-            print("inside post")
-            quantity = request.POST['quantity']
-            total_price = item.price * quantity
-            print(total_price)
-            Order.objects.create(
-                user=request.user,
-                item=item,
-                quantity=quantity,
-                total_price=total_price
-            )
-            messages.success(request, "Ordered successfully...")
-            return redirect('order_success')
+            quantity = request.POST.get('quantity')
+            if quantity is not None:
+                quantity = int(quantity)
+                total_price = item.price * quantity
+                Order.objects.create(
+                    user=request.user,
+                    item=item,
+                    quantity=quantity,
+                    total_price=total_price
+                )
+                messages.success(request, "Ordered successfully...")
+                # return render(request, 'order_success.html')
+                return redirect( 'home')
+        
+        # Render the template with the item
+        return render(request, 'place_order.html', {'item': item})
     else:
-        print('outside auth')
         messages.success(request, "You must be logged in to place an order.")
         return redirect('home')
 
+def myorders(request):
+    if request.user.is_authenticated:
+        orders = Order.objects.filter(user=request.user)
+        return render(request, 'myorder.html', {'orders': orders})
+    else:
+        messages.success(request, "You must be logged in to view your orders.")
+        return redirect('home')
 
+
+@login_required
+def profile(request):
+    user_profile = request.user.userprofile
+    return render(request, 'profile.html', {'user_profile': user_profile})
 
 
 def order_success(request):
     return render(request,'order_success')
+
+
+@login_required
+def add_menu_item(request):
+    if request.method == 'POST':
+        form = MenuItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Menu item added successfully.')
+            return redirect('home')
+    else:
+        form = MenuItemForm()
+    return render(request, 'add_menu_item.html', {'form': form})
+
+@login_required
+def update_menu_item(request, item_id):
+    item = MenuItem.objects.get(id=item_id)
+    if request.method == 'POST':
+        form = MenuItemForm(request.POST, request.FILES, instance=item)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Menu item updated successfully.')
+            return redirect('home')
+    else:
+        form = MenuItemForm(instance=item)
+    return render(request, 'update_menu_item.html', {'form': form, 'item': item})    
